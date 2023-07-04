@@ -1,0 +1,11 @@
+{
+  "name": "@palasthotel/corrections",
+  "version": "1.0.0",
+  "scripts": {
+    "watch": "wp-scripts start src/gutenberg.ts --output-path=plugin/dist",
+    "build": "wp-scripts build src/gutenberg.ts --output-path=plugin/dist"
+  },
+  "dependencies": {
+    "@wordpress/scripts": "^26.7.0"
+  }
+}

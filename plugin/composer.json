@@ -1,0 +1,9 @@
+{
+  "name": "palasthotel/corrections",
+  "description": "WordPress corrections workflow plugin",
+  "autoload": {
+    "psr-4": {
+      "Palasthotel\\WordPress\\Corrections\\": "classes"
+    }
+  }
+}

@@ -18,9 +18,7 @@ class EmailMessageService extends AbsMessageService {
 		$body    = $this->getBody( $message );
 
 		if ( ! $this->isDebug() ) {
-			add_filter( 'wp_mail_content_type', [ $this, 'set_content_type' ] );
 			$success = wp_mail( $message->recipient, $subject, $body );
-			remove_filter( 'wp_mail_content_type', [ $this, 'set_content_type' ] );
 			if ( ! $success ) {
 				throw new Exception( "Could not send mail. wp_mail result: $success", "mail" );
 			}
@@ -53,7 +51,4 @@ class EmailMessageService extends AbsMessageService {
 		return apply_filters( Plugin::FILTER_EMAIL_BODY, $body, $message );
 	}
 
-	public function set_content_type() {
-		return "text/html";
-	}
 }

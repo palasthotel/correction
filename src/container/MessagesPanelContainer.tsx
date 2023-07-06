@@ -8,6 +8,7 @@ import {
     Spinner,
     Button, CheckboxControl
 } from "@wordpress/components";
+import Card from '../components/Card'
 import {getContentStructure, getRecipientSuggestionsConfig} from "../global";
 import {useMessageContent} from "../hooks/use-message-content";
 import {useIsLocked} from "../hooks/use-post";
@@ -141,20 +142,11 @@ export default function MessagesPaneContainer(
             <h2>{showAllRequests ? "All requests" : "Latest requests"}</h2>
 
             {(showAllRequests ? archive : latestMessages).map(m => {
-                return <div
-                    key={m.id}
-                    style={{
-                        border: "1px solid var(--wp--preset--color--gray)",
-                        borderRadius: 2,
-                        padding: 10,
-                        marginBlock: 5,
-                        wordWrap: "break-word",
-                    }}
-                >
+                return <Card key={m.id}>
                     <div style={{wordWrap: "break-word"}}>{m.recipient}</div>
                     {m.sent_timestamp ? <>✅ <i>{dateFormat(m.sent_timestamp * 1000)}</i></> : null}
                     {m.error_timestamp ? <>🚨 <i>{dateFormat(m.error_timestamp * 1000)}</i></> : null}
-                </div>
+                </Card>
             })}
 
             <br/>

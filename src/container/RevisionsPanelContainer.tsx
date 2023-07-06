@@ -1,5 +1,6 @@
 import {useRevisionsGroupByAuthorSortByTime} from "../hooks/use-revisions";
 import {Button, PanelBody, PanelRow} from "@wordpress/components";
+import Card from '../components/Card'
 import {getAllRevisionsUrl} from "../global";
 import {dateFormat} from "../lib/date-format";
 
@@ -20,12 +21,11 @@ export default function RevisionsPanelContainer(
         <PanelBody title={title} initialOpen={initialOpen}>
             {revisions.map((revision,) => {
                 return (
-                    <PanelRow key={revision.revision_post_id}>
-                        <div>
-                            {revision.author_name}<br/>
-                            <i>{dateFormat(revision.timestamp * 1000)}</i>
-                        </div>
-                    </PanelRow>
+                    <Card key={revision.revision_post_id}>
+
+                        {revision.author_name}<br/>
+                        <i>{dateFormat(revision.timestamp * 1000)}</i>
+                    </Card>
                 )
             })}
             <br/>

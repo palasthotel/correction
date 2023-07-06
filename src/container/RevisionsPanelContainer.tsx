@@ -1,7 +1,7 @@
 import {useRevisionsGroupByAuthorSortByTime} from "../hooks/use-revisions";
-import {Button, PanelBody, PanelRow} from "@wordpress/components";
+import {Button, PanelBody} from "@wordpress/components";
 import Card from '../components/Card'
-import {getAllRevisionsUrl} from "../global";
+import {getAllRevisionsUrl, translate} from "../global";
 import {dateFormat} from "../lib/date-format";
 
 type Props = {
@@ -11,7 +11,7 @@ type Props = {
 
 export default function RevisionsPanelContainer(
     {
-        title = "Latest corrections",
+        title = translate("Latest corrections"),
         initialOpen = true,
     }: Props
 ) {
@@ -29,7 +29,7 @@ export default function RevisionsPanelContainer(
                 )
             })}
             <br/>
-            <Button href={getAllRevisionsUrl()} variant="link">All revisions</Button>
+            <Button href={getAllRevisionsUrl()} variant="link">{translate("All revisions")}</Button>
         </PanelBody>
     )
 }

@@ -2,6 +2,10 @@
 declare global {
     interface Window {
         Corrections: {
+            domain: string
+            i18n: {
+                [key: string]: string
+            }
             postId: number
             contentStructure: {
                 key: string
@@ -21,6 +25,8 @@ declare global {
         }
     }
 }
+
+export const translate = (key: string) => window.Corrections.i18n[key] ?? `? ${key} ?`;
 export const getPostId = () => window.Corrections.postId;
 export const getContentStructure = () => window.Corrections.contentStructure;
 export const getRecipientSuggestionsConfig = () => window.Corrections.recipientSuggestionsConfig;

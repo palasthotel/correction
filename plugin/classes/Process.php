@@ -4,7 +4,6 @@ namespace Palasthotel\WordPress\Corrections;
 
 use Exception;
 use Palasthotel\WordPress\Corrections\Components\Component;
-use Palasthotel\WordPress\Corrections\Model\Message;
 use Palasthotel\WordPress\Corrections\Service\EmailMessageService;
 use Palasthotel\WordPress\Corrections\Service\MessageService;
 

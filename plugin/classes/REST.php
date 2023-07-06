@@ -103,10 +103,6 @@ class REST extends Component {
 					$this->plugin->process->doPendingMessages( $post->ID );
 				},
 				'permission_callback' => [ $this, 'can_edit_post_permission' ],
-				'schema'              => array(
-					'description' => "Gegenleser",
-					'type'        => 'array'
-				),
 			]
 		);
 

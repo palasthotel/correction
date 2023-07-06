@@ -14,6 +14,7 @@ import {useMessageContent} from "../hooks/use-message-content";
 import {useIsLocked} from "../hooks/use-post";
 import {dateFormat} from "../lib/date-format";
 import {useState} from "@wordpress/element";
+import { translate} from "../global";
 
 type Props = {
     title?: string
@@ -21,7 +22,7 @@ type Props = {
 }
 export default function MessagesPaneContainer(
     {
-        title = "Requests",
+        title = translate("Requests"),
         initialOpen = false,
     }: Props
 ) {
@@ -82,7 +83,7 @@ export default function MessagesPaneContainer(
 
             {suggestionsConfig.type == "autocomplete" ?
                 <FormTokenField
-                    label="Send correction request to"
+                    label={translate("Send correction request to")}
                     onChange={(value) => {
                         setPendingRecipients(value as string[]);
                     }}
@@ -95,7 +96,7 @@ export default function MessagesPaneContainer(
 
             {suggestionsConfig.type == "checkbox" ?
                 <>
-                    <h2>Send correction request to</h2>
+                    <h2>{translate("Send correction request to")}</h2>
                     {suggestionsConfig.options.map(option => {
 
                         return <CheckboxControl
@@ -128,18 +129,23 @@ export default function MessagesPaneContainer(
                 <i>{pendingRecipients.length ?
                     (
                         isLocked ?
-                            "Sending requests..."
+                            translate("Sending requests...")
                             :
-                            "Save post to send requests."
+                            translate("Save post to send requests.")
                     )
                     :
-                    "No recipients selected."
+                    translate("No recipients selected.")
                 }</i>
             </div>
 
             <hr/>
 
-            <h2>{showAllRequests ? "All requests" : "Latest requests"}</h2>
+            <h2>{
+                showAllRequests ?
+                    translate("All requests")
+                    :
+                    translate("Latest requests")
+            }</h2>
 
             {(showAllRequests ? archive : latestMessages).map(m => {
                 return <Card key={m.id}>
@@ -149,15 +155,18 @@ export default function MessagesPaneContainer(
                 </Card>
             })}
 
-            <br/>
+            {archive.length == 0 ? <p><i>{translate("No request yet.")}</i></p>: null}
 
-            {!showAllRequests ?
-                <Button
-                    variant="secondary"
-                    onClick={onShowAllMessages}
-                >
-                    Show all requests
-                </Button>
+            {!showAllRequests && archive.length > latestMessages.length ?
+                <>
+                    <br/>
+                    <Button
+                        variant="secondary"
+                        onClick={onShowAllMessages}
+                    >
+                        {translate("Show all requests")}
+                    </Button>
+                </>
                 : null
             }
 

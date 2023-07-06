@@ -10,7 +10,10 @@ declare global {
                 help?: string
                 defaultValue: any
             }[]
-            receiverSuggestions: string[]
+            recipientSuggestionsConfig: {
+                type: 'checkbox' | 'autocomplete',
+                options: string[]
+            }
             allRevisionsUrl: string
             endpoints: {
                 isValidRecipientBaseUrl: string
@@ -20,7 +23,7 @@ declare global {
 }
 export const getPostId = () => window.Corrections.postId;
 export const getContentStructure = () => window.Corrections.contentStructure;
-export const getReceiverSuggestions = () => window.Corrections.receiverSuggestions;
+export const getRecipientSuggestionsConfig = () => window.Corrections.recipientSuggestionsConfig;
 export const getAllRevisionsUrl = () => window.Corrections.allRevisionsUrl
 
 export const getIsValidRecipientEndpoint = (recipient: string) =>

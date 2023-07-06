@@ -26,8 +26,8 @@ class Repository {
 		return $content;
 	}
 
-	public function enqueueMessage( mixed $id, mixed $receiver ) {
-		$this->messages->enqueueMessage($id, $receiver);
+	public function enqueueMessage( mixed $id, mixed $recipient ) {
+		$this->messages->enqueueMessage($id, $recipient);
 	}
 
 }

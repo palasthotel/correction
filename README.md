@@ -6,22 +6,22 @@ This plugin provides an editorial workflow for correction requests.
 
 Some data filters to change the plugins behavior from outside.
 
-### Receiver suggestions
+### Recipient suggestions
 
-You can provide a list of receiver suggestions. These will be suggested in the Gutenberg UI.
+You can provide a list of recipient suggestions. These will be suggested in the Gutenberg UI.
 
 ```php
 add_filter(
-    \Palasthotel\WordPress\Corrections\Plugin::FILTER_RECEIVER_SUGGESTIONS,
+    \Palasthotel\WordPress\Corrections\Plugin::FILTER_RECIPIENT_SUGGESTIONS,
     function(array $suggestions){
-        return ["receiver1@palasthotel.de", "receiver2@palasthote.de"];
+        return ["recipient1@palasthotel.de", "recipient2@palasthote.de"];
     }
 );
 ```
 
 ### Message Service
 
-The default MessageService implementation will send an email to the receiver. A custom implementation can be provided by implementing the `\Palasthotel\WordPress\Corrections\Service\MessagingService` interface und using the filter.
+The default MessageService implementation will send an email to the recipient. A custom implementation can be provided by implementing the `\Palasthotel\WordPress\Corrections\Service\MessagingService` interface und using the filter.
 
 ```php
 add_filter(

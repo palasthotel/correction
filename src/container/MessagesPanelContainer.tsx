@@ -1,9 +1,18 @@
-import {useMessages} from "../hooks/use-messages";
-import CorrectorsControl from "../components/CorrectorsControl";
-import {useState} from "@wordpress/element";
-import {PanelBody, TextareaControl, TextControl, ToggleControl} from "@wordpress/components";
-import {getContentStructure} from "../global";
+import {useLatestMessages, useMessageArchive, useMessages, usePendingRecipients} from "../hooks/use-messages";
+import {
+    FormTokenField,
+    PanelBody,
+    TextareaControl,
+    TextControl,
+    ToggleControl,
+    Spinner,
+    Button, CheckboxControl
+} from "@wordpress/components";
+import {getContentStructure, getRecipientSuggestionsConfig} from "../global";
 import {useMessageContent} from "../hooks/use-message-content";
+import {useIsLocked} from "../hooks/use-post";
+import {dateFormat} from "../lib/date-format";
+import {useState} from "@wordpress/element";
 
 type Props = {
     title?: string
@@ -11,24 +20,28 @@ type Props = {
 }
 export default function MessagesPaneContainer(
     {
-        title = "Request",
+        title = "Requests",
         initialOpen = false,
-    }:Props
+    }: Props
 ) {
-
-    const messages = useMessages();
-    const [messageContent, setMessageContent] = useMessageContent()
-
-    const [recipients, setRecipients] = useState<string[]>([]);
-
-    const pending = messages.filter(m => m.sent_timestamp === null);
-    const pendingReceivers = pending.map(p => p.receiver);
-
     const contentStructure = getContentStructure();
+
+    const archive = useMessageArchive();
+    const latestMessages = useLatestMessages();
+    const [pendingRecipients, setPendingRecipients] = usePendingRecipients();
+    const [messageContent, setMessageContent] = useMessageContent();
+    const isLocked = useIsLocked();
+    const [showAllRequests, setShowAllRequests] = useState(false);
 
     const onChange = (key: string) => (value: string | boolean) => {
         setMessageContent({...messageContent, [key]: value})
     }
+
+    const onShowAllMessages = () => {
+        setShowAllRequests(true)
+    }
+
+    const suggestionsConfig = getRecipientSuggestionsConfig();
 
     return (
         <PanelBody title={title} initialOpen={initialOpen}>
@@ -64,24 +77,97 @@ export default function MessagesPaneContainer(
                 return <p key={widget.key}>Unknown: {widget.label}</p>
             })}
 
-            <CorrectorsControl
-                value={recipients}
-                onChange={setRecipients}
-            />
+            <hr/>
 
-            <p>TODO: check recipient is valid</p>
+            {suggestionsConfig.type == "autocomplete" ?
+                <FormTokenField
+                    label="Send correction request to"
+                    onChange={(value) => {
+                        setPendingRecipients(value as string[]);
+                    }}
+                    suggestions={suggestionsConfig.options}
+                    value={pendingRecipients}
+                    disabled={isLocked}
+                />
+                : null
+            }
 
-            <p>Add recipient to queue</p>
+            {suggestionsConfig.type == "checkbox" ?
+                <>
+                    <h2>Send correction request to</h2>
+                    {suggestionsConfig.options.map(option => {
 
-            <ul>
-                {recipients.map(r => {
-                    return <li key={r}>{r}</li>
-                })}
-            </ul>
+                        return <CheckboxControl
+                            key={option}
+                            label={option}
+                            checked={pendingRecipients.includes(option)}
+                            disabled={isLocked}
+                            onChange={(checked)=>{
+                                if(checked){
+                                    setPendingRecipients([
+                                        ...pendingRecipients,
+                                        option,
+                                    ]);
+                                } else {
+                                    setPendingRecipients(pendingRecipients.filter(r => r != option));
+                                }
+                            }}
+                        />
+                    })}
+                </>
+                :null
+            }
+
+
+
+            <div style={{paddingBlockStart: 8}}>
+                {pendingRecipients.length ?
+                    (isLocked ? <Spinner/> : "🟠") : "⚪️"
+                }&nbsp;
+                <i>{pendingRecipients.length ?
+                    (
+                        isLocked ?
+                            "Sending requests..."
+                            :
+                            "Save post to send requests."
+                    )
+                    :
+                    "No recipients selected."
+                }</i>
+            </div>
 
             <hr/>
 
-            <h2>Sent messages</h2>
+            <h2>{showAllRequests ? "All requests" : "Latest requests"}</h2>
+
+            {(showAllRequests ? archive : latestMessages).map(m => {
+                return <div
+                    key={m.id}
+                    style={{
+                        border: "1px solid var(--wp--preset--color--gray)",
+                        borderRadius: 2,
+                        padding: 10,
+                        marginBlock: 5,
+                        wordWrap: "break-word",
+                    }}
+                >
+                    <div style={{wordWrap: "break-word"}}>{m.recipient}</div>
+                    {m.sent_timestamp ? <>✅ <i>{dateFormat(m.sent_timestamp * 1000)}</i></> : null}
+                    {m.error_timestamp ? <>🚨 <i>{dateFormat(m.error_timestamp * 1000)}</i></> : null}
+                </div>
+            })}
+
+            <br/>
+
+            {!showAllRequests ?
+                <Button
+                    variant="secondary"
+                    onClick={onShowAllMessages}
+                >
+                    Show all requests
+                </Button>
+                : null
+            }
 
 
         </PanelBody>

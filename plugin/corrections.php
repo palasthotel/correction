@@ -34,7 +34,7 @@ class Plugin extends Components\Plugin {
 	const FILTER_EMAIL_BODY = "corrections_email_text";
 	const FILTER_POST_TYPES = "corrections_post_types";
 	const FILTER_MESSAGE_CONTENT_STRUCTURE = "corrections_content_structure";
-	const FILTER_RECEIVER_SUGGESTIONS = "corrections_receiver_suggestions";
+	const FILTER_RECIPIENT_SUGGESTIONS = "corrections_recipient_suggestions";
 	const HANDLE_GUTENBERG_SCRIPT = "corrections-script";
 	const REST_FIELD_REVISIONS = "corrections_revisions";
 	const REST_FIELD_MESSAGES = "corrections_messages";
@@ -42,7 +42,7 @@ class Plugin extends Components\Plugin {
 	public Process $process;
 	public Ajax $ajax;
 	public Repository $repository;
-	private Messages $messagesSource;
+	public Messages $messagesSource;
 
 	function onCreate() {
 		$this->loadTextdomain(self::DOMAIN, "languages");

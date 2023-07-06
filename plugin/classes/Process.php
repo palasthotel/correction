@@ -2,6 +2,7 @@
 
 namespace Palasthotel\WordPress\Corrections;
 
+use Exception;
 use Palasthotel\WordPress\Corrections\Components\Component;
 use Palasthotel\WordPress\Corrections\Model\Message;
 use Palasthotel\WordPress\Corrections\Service\EmailMessageService;
@@ -27,13 +28,13 @@ class Process extends Component {
 		$pending        = $this->plugin->messagesSource->getPending( $post_id );
 
 		foreach ( $pending as $item ) {
-
-			$finalMessage = $messageService->send( $item );
-
-			if ( $finalMessage instanceof Message ) {
-				$finalMessage->sent_timestamp = time();
+			try {
+				$finalMessage = $messageService->send( $item );
 				$this->plugin->messagesSource->setSent( $item->id, $finalMessage->logs );
+			} catch ( Exception $e){
+				$this->plugin->messagesSource->setErrored($item->id,  $e->getMessage());
 			}
+
 		}
 	}
 

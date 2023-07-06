@@ -37,7 +37,7 @@ class Gutenberg extends Component {
 			[
 				"postId" => get_the_ID(),
 				"contentStructure" => Config::getContentStructure(get_the_ID())->toArray(),
-				"receiverSuggestions" => Config::getReceiverSuggestions(),
+				"recipientSuggestionsConfig" => Config::getRecipientSuggestions()->toArray(),
 				"allRevisionsUrl" => wp_get_post_revisions_url(get_the_ID()),
 				"endpoints" => [
 					"isValidRecipientBaseUrl" => $this->plugin->ajax->getIsValidRecipientBaseUrl(),

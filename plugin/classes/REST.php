@@ -87,15 +87,15 @@ class REST extends Component {
 				'update_callback'     => function ( $value, \WP_Post $post ) {
 					if ( is_array( $value ) && count( $value ) > 0 ) {
 						$candidates = array_filter( $value, function ( $item ) {
-							return isset( $item["receiver"] ) && ( ! isset( $item["sent_timestamp"] ) || $item["sent_timestamp"] == null );
+							return isset( $item["recipient"] ) && $item["id"] == 0;
 						} );
 						if ( count( $candidates ) > 0 ) {
-							$receivers = array_map( function ( $item ) {
-								return sanitize_email( $item["receiver"] );
+							$recipients = array_map( function ( $item ) {
+								return sanitize_text_field( $item["recipient"] );
 							}, $candidates );
-							foreach ( $receivers as $receiver ) {
+							foreach ( $recipients as $recipient ) {
 								$this->plugin->repository->enqueueMessage(
-									$post->ID, $receiver,
+									$post->ID, $recipient,
 								);
 							}
 						}

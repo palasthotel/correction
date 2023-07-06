@@ -5,7 +5,19 @@
     "watch": "wp-scripts start src/gutenberg.ts --output-path=plugin/dist",
     "build": "wp-scripts build src/gutenberg.ts --output-path=plugin/dist"
   },
+  "engines": {
+    "node": "~20",
+    "npm": "~9"
+  },
   "dependencies": {
+    "@types/wordpress__edit-post": "^7.5.0",
+    "@types/wordpress__editor": "^13.6.2",
+    "@wordpress/components": "^25.2.0",
+    "@wordpress/data": "^9.6.0",
+    "@wordpress/edit-post": "^7.13.0",
+    "@wordpress/editor": "^13.13.0",
+    "@wordpress/element": "^5.13.0",
+    "@wordpress/plugins": "^6.4.0",
     "@wordpress/scripts": "^26.7.0"
   }
 }

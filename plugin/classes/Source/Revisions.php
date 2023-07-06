@@ -11,7 +11,7 @@ class Revisions {
 	 *
 	 * @return Revision[]
 	 */
-	public static function getAll( $post_id): array {
+	public static function getLatestOfAuthors( $post_id): array {
 		global $wpdb;
 		$results = $wpdb->get_results(
 			$wpdb->prepare(
@@ -20,12 +20,22 @@ class Revisions {
 			)
 		);
 
+		$revisions = [];
+		foreach ($results as $item){
+			if(!isset($revisions[$item->post_author])){
+				$revisions[$item->post_author] = $item;
+			}
+			if(strtotime($revisions[$item->post_author]->post_date_gmt) < strtotime($item->post_date_gmt)){
+				$revisions[$item->post_author]->post_date_gmt = $item->post_date_gmt;
+			}
+		}
+
 		return array_map(function($item){
 			return new Revision(
 				intval($item->ID),
 				intval($item->post_author),
 				strtotime($item->post_date_gmt)
 			);
-		}, $results);
+		}, array_values($revisions));
 	}
 }

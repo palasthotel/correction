@@ -9,7 +9,7 @@ use Palasthotel\WordPress\Corrections\Service\MessageService;
 
 class Process extends Component {
 
-	private function getMessageService(): MessageService {
+	public function getMessageService(): MessageService {
 		return apply_filters( Plugin::FILTER_MESSAGE_SERVICE, new EmailMessageService() );
 	}
 
@@ -30,8 +30,9 @@ class Process extends Component {
 
 			$finalMessage = $messageService->send( $item );
 
-			if ( $finalMessage instanceof Message) {
-				$this->plugin->messagesSource->setSent( $item->id, $finalMessage->content );
+			if ( $finalMessage instanceof Message ) {
+				$finalMessage->sent_timestamp = time();
+				$this->plugin->messagesSource->setSent( $item->id, $finalMessage->logs );
 			}
 		}
 	}

@@ -9,11 +9,11 @@ Stable tag: 1.0.0
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl
 
-This plugin provides a editorial workflow for correction requests.
+This plugin provides an editorial workflow for correction requests.
 
 == Description ==
 
-This plugin provides a editorial workflow for correction requests.
+This plugin provides an editorial workflow for correction requests.
 
 == Installation ==
 

@@ -3,15 +3,15 @@
 namespace Palasthotel\WordPress\Corrections\Model;
 
 class Revision {
-	public int $post_id;
+	public int $revision_post_id;
 	public int $author;
 	public int $timestamp;
 
 	private ?string $authorDisplayName = null;
 
-	public function __construct(int $post_id, int $author, int $timestamp) {
-		$this->post_id = $post_id;
-		$this->author = $author;
+	public function __construct(int $revision_post_id, int $author, int $timestamp) {
+		$this->revision_post_id = $revision_post_id;
+		$this->author           = $author;
 		$this->timestamp = $timestamp;
 	}
 

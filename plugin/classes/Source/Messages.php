@@ -10,7 +10,7 @@ class Messages extends Database {
 	private string $table;
 
 	function init(): void {
-		$this->table = $this->wpdb->prefix . '_corrections_messages';
+		$this->table = $this->wpdb->prefix . 'corrections_messages';
 	}
 
 
@@ -67,7 +67,7 @@ class Messages extends Database {
 		$message = new Message(
 			$row->post_id,
 			$row->receiver,
-			$row->content,
+			$row->logs,
 			$row->modified_timestamp,
 		);
 		$message->id = $row->id;
@@ -106,7 +106,7 @@ class Messages extends Database {
 			 id bigint(20) unsigned not null auto_increment,
 			 post_id bigint(20) unsigned not null,
 			 receiver varchar(190) not null,
-			 content text default '',
+			 logs text default '' NOT NULL,
 			 modified_timestamp int(11) NOT NULL,
 			 sent_timestamp int(11) DEFAULT NULL,
 			 primary key (id),

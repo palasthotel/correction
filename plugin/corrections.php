@@ -28,31 +28,41 @@ require_once __DIR__ . "/vendor/autoload.php";
 class Plugin extends Components\Plugin {
 
 	const DOMAIN = "corrections";
-
 	const FILTER_SHOULD_PROCESS_PENDING_MESSAGES = "corrections_should_process_messages";
-
 	const FILTER_MESSAGE_SERVICE = "corrections_message_service";
-
 	const FILTER_EMAIL_SUBJECT = "corrections_email_subject";
 	const FILTER_EMAIL_BODY = "corrections_email_text";
-
+	const FILTER_POST_TYPES = "corrections_post_types";
+	const FILTER_MESSAGE_CONTENT_STRUCTURE = "corrections_content_structure";
+	const FILTER_RECEIVER_SUGGESTIONS = "corrections_receiver_suggestions";
 	const HANDLE_GUTENBERG_SCRIPT = "corrections-script";
-
 	const REST_FIELD_REVISIONS = "corrections_revisions";
-
 	const REST_FIELD_MESSAGES = "corrections_messages";
-	public Messages $messagesSource;
+	const REST_FIELD_MESSAGE_CONTENT = "corrections_message_content";
 	public Process $process;
+	public Ajax $ajax;
+	public Repository $repository;
+	private Messages $messagesSource;
 
 	function onCreate() {
 		$this->loadTextdomain(self::DOMAIN, "languages");
 
-		$this->messagesSource = new Messages();
+		$this->messagesSource   = new Messages();
+		$this->repository = new Repository($this->messagesSource);
 		new REST($this);
+		$this->ajax = new Ajax($this);
 		$this->process = new Process($this);
 		new Gutenberg($this);
 
 
+		if(WP_DEBUG){
+			$this->messagesSource->createTables();
+		}
+	}
+
+	public function onSiteActivation(): void {
+		parent::onSiteActivation();
+		$this->messagesSource->createTables();
 	}
 }
 
